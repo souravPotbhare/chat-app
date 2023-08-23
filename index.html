@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sourav's Chat-App</title>
+  <style>
+    /* styles.css */
+    third-color: #9DB2BF;
+
+    < !-- Colours -->.main-color {
+      background-color: #27374D;
+    }
+
+    .secondary-color {
+      background-color: #526D82;
+    }
+
+    .tertiary-color {
+      background-color: #9DB2BF;
+    }
+
+    .last-color {
+      background-color: #DDE6ED;
+    }
+
+    /* Reset default styles */
+    body,
+    h1,
+    h2,
+    h3,
+    p,
+    ul,
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Global styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #27374D;
+    }
+
+    #container {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    /* User List Styles */
+    #user-list {
+      flex: 1;
+      background: #526D82;
+      linear-gradient(to right, #ccc 0%, #f0f0f0 100%)
+      /* Gradient background */
+      border-right: 1px solid #ccc;
+      box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+
+    #users {
+      list-style-type: none;
+      background-color: #415768;
+      color: white;
+      padding: 0;
+      margin: 0;
+    }
+
+    #users li {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+
+    #users li:hover {
+      background-color: #DDE6ED;
+      color: black;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .user-details {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: bold;
+    }
+
+    .user-status {
+      color: #777;
+    }
+
+    .unread-count {
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+
+    /* Message Section Styles */
+    #message-section {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-color: #27374D;
+      /* Light gray background */
+      box-shadow: -1px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #chat-heading {
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      border-bottom: 1px solid #ddd;
+      margin: 0;
+    }
+
+    #chat {
+      flex: 1;
+      overflow-y: scroll;
+      padding: 20px;
+      < !-- background: linear-gradient(rgba(0, 0, 0, 0.1));
+      /* Gradient background */
+      -->border-radius: 0 0 15px 15px;
+      /* Rounded corners at the bottom */
+    }
+
+    #messages li {
+      padding: 5px 10px;
+      /* Adjust padding for general messages */
+      margin: 5px 0;
+      border-radius: 5px;
+      width: max-content;
+      min-width: 5%;
+      max-width: 60%;
+      word-wrap: break-word;
+    }
+
+    #messages li.sent {
+      background-color: #dcf8c6;
+      padding: 5px 10px;
+      /* Adjust padding to match general messages */
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    #messages li.received {
+      background-color: #DDE6ED;
+      padding: 5px 10px;
+      /* Adjust padding to match general messages */
+      align-self: flex-start;
+      margin-right: auto;
+    }
+
+    /* Input Section Styles */
+    #input-container {
+      padding: 15px 20px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      background-color: #9DB2BF;
+    }
+
+    #input {
+      flex-grow: 1;
+      padding: 10px 15px;
+      /* Slightly more padding */
+      border: none;
+      border-radius: 5px;
+      /* Keep it square with rounded corners */
+      margin-right: 10px;
+      outline: none;
+      < !-- background-color: rgba(255, 255, 255, 0.1);
+      -->background-color: #fff;
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+      /* Subtle shadow */
+      transition: box-shadow 0.3s;
+    }
+
+    #input:focus {
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      /* More pronounced shadow on focus */
+    }
+
+    #form {
+      display: contents;
+    }
+
+    #form button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #form button:hover {
+      background-color: #0056b3;
+    }
+
+    #messages {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .section-header {
+      padding: 17px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      < !-- background-color: #f8f9fa;
+      /* Light gray background */
+      -->border-bottom: 1px solid #ddd;
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <body>
+    <div id="container">
+      <div id="user-list" class="secondary-color">
+        <div class="section-header tertiary-color">Users</div>
+        <ul id="users"></ul>
+      </div>
+      <div id="message-section">
+        <div class="section-header tertiary-color">Sᴏᴜʀᴀᴠ Pᴏᴛʙʜᴀʀᴇ<span id="chat-partner"></span></div>
+        <div id="chat">
+          <ul id="messages"></ul>
+        </div>
+        <div id="input-container">
+          <form id="form" action="">
+            <input id="input" autocomplete="off" placeholder="Type a message" />
+            <button>Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(() => {
+        const socket = io();
+        let userName = '';
+
+        // Prompt user for their name
+        while (!userName) {
+          userName = prompt("Enter your name:");
+        }
+        socket.emit("user joined", userName);
+
+        socket.on("user joined", (userName) => {
+          const userElement = document.createElement("li");
+          userElement.textContent = userName;
+          userElement.addEventListener('click', () => {
+            $('#chat-partner').text(userName); // Set the clicked user's name as the header text
+            $('#messages').empty();
+          });
+          $("#users").append(userElement);
+        });
+
+        // Handle the header text when a user is clicked
+        $('#users').on('click', 'li', function() {
+          const clickedUserName = $(this).text();
+          $('#chat-partner').text(clickedUserName);
+          $('#messages').empty();
+        });
+
+        // replcing emojis with certain words
+        const emojiMap = {
+          react: "⚛️",
+          woah: "😮",
+          hey: "👋🏻",
+          lol: "🤣",
+          like: "❤️",
+          congratulations: "🎉",
+          // Add more word-to-emoji mappings here
+        };
+
+        $('#form').submit((e) => {
+          e.preventDefault();
+          const input = $('#input');
+          const message = input.val().trim();
+
+          // Replace words with emojis
+          const words = message.split(' ');
+          const emojiMessage = words.map(word => emojiMap[word] || word).join(' ');
+
+          if (emojiMessage) {
+            // Emit the emojiMessage to the server and display it in the chat
+            socket.emit('chat message', emojiMessage);
+            input.val('');
+          }
+        });
+
+        socket.on('chat message', (data) => {
+          const li = $('<li>').text(data.message);
+          if (data.sender === userName) {
+            li.addClass('sent');
+          } else {
+            li.addClass('received');
+          }
+          $('#messages').append(li);
+          $('#chat').scrollTop($('#chat')[0].scrollHeight);
+        });
+
+        // Handle slash commands
+        $('#form').on('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            const input = $('#input').val();
+            if (input.startsWith('/')) {
+              e.preventDefault();
+              handleSlashCommand(input);
+            }
+          }
+        });
+
+        function handleSlashCommand(command) {
+          switch (command) {
+            case '/help':
+              addReceivedMessage('Available commands:/help, /emojis');
+              break;
+            case '/emojis':
+              const emojiList = Object.keys(emojiMap).join(', ');
+              addReceivedMessage(`Available emojis: ${emojiList}`);
+              break;
+            default:
+              addReceivedMessage(`Invalid command: ${command}`);
+              break;
+          }
+        }
+
+        // Auto-response message when user types their name
+        addReceivedMessage(`Welcome, ${userName}! Type "/help" for commands.`);
+
+        function addReceivedMessage(msg) {
+          const li = $('<li>').text(msg).addClass('received');
+          $('#messages').append(li);
+          $('#chat').scrollTop($('#chat')[0].scrollHeight);
+        }
+      });
+    </script>
+  </body>
+
+</html>
