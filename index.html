@@ -339,20 +339,29 @@
         function handleSlashCommand(command) {
           switch (command) {
             case '/help':
-              addReceivedMessage('Available commands:/help, /emojis');
+              addReceivedMessage('Available commands: /help - to get this Message, /emojis - to know Emojis replacement Words, /clear - clear the Chat, /random - to get a Random Number');
               break;
             case '/emojis':
               const emojiList = Object.keys(emojiMap).join(', ');
               addReceivedMessage(`Available emojis: ${emojiList}`);
               break;
+            case '/random':
+              const randomNum = Math.random();
+              addReceivedMessage(`Random number: ${randomNum}`);
+              break;
+            case '/clear':
+              $('#messages').empty();
+              addReceivedMessage(`Welcome, ${userName}! How can I "/help" you ?`);
+              break;
             default:
               addReceivedMessage(`Invalid command: ${command}`);
               break;
           }
+          $("inputField").empty(); // Clear the input field after processing the command
         }
 
         // Auto-response message when user types their name
-        addReceivedMessage(`Welcome, ${userName}! Type "/help" for commands.`);
+        addReceivedMessage(`Welcome, ${userName}! How can I "/help" you ?`);
 
         function addReceivedMessage(msg) {
           const li = $('<li>').text(msg).addClass('received');
